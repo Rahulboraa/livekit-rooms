@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource/caveat/400.css";
+@import "@fontsource/caveat/700.css";
 
 @theme {
   --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
