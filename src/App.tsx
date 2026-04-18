@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
   motion,
-  AnimatePresence,
   useScroll,
   useSpring,
   useMotionValue,
@@ -581,8 +580,6 @@ function Hero() {
 // ─── SERVICES ─────────────────────────────────────────────────────────────────
 
 function Services() {
-  const [open, setOpen] = useState<number | null>(0);
-
   return (
     <section id="services" className="bg-[#171717] py-28 relative">
       <SectionDivider />
@@ -611,63 +608,46 @@ function Services() {
           </p>
         </motion.div>
 
-        <div className="divide-y divide-white/[0.06] border border-white/[0.08] rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {SERVICES.map((s, i) => {
             const Icon = s.Icon;
-            const isOpen = open === i;
             return (
               <motion.div
                 key={s.id}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                className="h-full"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.04 }}
+                transition={{ delay: i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -5 }}
               >
-                <button
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  className={`w-full flex items-center gap-4 px-6 py-4 text-left transition-colors duration-200 ${
-                    isOpen ? "bg-white/[0.04]" : "hover:bg-white/[0.02]"
-                  }`}
+                <SpotlightCard
+                  className="bg-white/[0.025] border border-white/[0.08] rounded-2xl p-6 h-full group cursor-default shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] hover:border-blue-500/20 transition-colors duration-300"
+                  accent="#3b82f6"
                 >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors duration-200 ${
-                    isOpen ? "bg-blue-500/20 border border-blue-500/30 text-blue-400" : "bg-white/[0.04] border border-white/[0.08] text-white/35"
-                  }`}>
-                    <Icon size={14} />
-                  </div>
-                  <span className={`flex-1 text-sm font-medium transition-colors duration-200 ${isOpen ? "text-white" : "text-white/55"}`}>
-                    {s.title}
-                  </span>
-                  <span className="text-[10px] text-white/20 mr-3 hidden sm:block">{s.scope}</span>
-                  <motion.div
-                    animate={{ rotate: isOpen ? 45 : 0 }}
-                    transition={{ duration: 0.2 }}
-                    className={`text-lg leading-none flex-shrink-0 transition-colors duration-200 ${isOpen ? "text-blue-400" : "text-white/20"}`}
-                  >
-                    +
-                  </motion.div>
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {isOpen && (
+                  <div className="flex items-start justify-between mb-5">
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                      className="overflow-hidden"
+                      className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400"
+                      whileHover={{ scale: 1.1, backgroundColor: "rgba(59,130,246,0.18)" }}
+                      transition={{ type: "spring", stiffness: 400 }}
                     >
-                      <div className="px-6 pb-5 pt-1 flex items-start justify-between gap-6">
-                        <p className="text-sm text-white/45 leading-relaxed max-w-xl">{s.desc}</p>
-                        <a
-                          href="#contact"
-                          className="flex-shrink-0 text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 mt-0.5"
-                        >
-                          Discuss <ArrowUpRight size={11} />
-                        </a>
-                      </div>
+                      <Icon size={16} />
                     </motion.div>
-                  )}
-                </AnimatePresence>
+                    <span className="text-[10px] font-semibold text-white/25 bg-white/[0.04] border border-white/[0.07] px-2.5 py-1 rounded-full tracking-wide">
+                      {s.scope}
+                    </span>
+                  </div>
+                  <h3 className="text-[0.9rem] font-bold text-white/85 leading-snug mb-2.5">{s.title}</h3>
+                  <p className="text-[0.78rem] text-white/30 leading-relaxed">{s.desc}</p>
+                  <div className="mt-5 pt-4 border-t border-white/[0.05] flex items-center justify-end">
+                    <a
+                      href="#contact"
+                      className="text-[11px] font-semibold text-blue-400/60 hover:text-blue-400 transition-colors duration-200 flex items-center gap-1"
+                    >
+                      Discuss <ArrowUpRight size={10} />
+                    </a>
+                  </div>
+                </SpotlightCard>
               </motion.div>
             );
           })}
